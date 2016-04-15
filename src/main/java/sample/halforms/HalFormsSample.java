@@ -39,7 +39,7 @@ public class HalFormsSample {
 
 	@Bean
 	public CurieProvider curieProvider() {
-		return new DefaultCurieProvider("task", new UriTemplate("http://localhost:8080/rels/{rel}"));
+		return new DefaultCurieProvider("halforms", new UriTemplate("http://localhost:8080/profile/{rel}"));
 	}
 
 	public static void main(String[] args) {
