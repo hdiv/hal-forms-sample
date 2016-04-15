@@ -26,6 +26,6 @@ public class ApplicationController {
 
 	@RequestMapping(value = "/", produces = { "text/html" })
 	public String indexPage() {
-		return "redirect:/index.html";
+		return "redirect:/browser/index.html";
 	}
 }
