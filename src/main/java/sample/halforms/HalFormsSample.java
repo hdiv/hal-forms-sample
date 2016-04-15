@@ -24,7 +24,7 @@ import sample.halforms.model.Task;
 @ComponentScan
 @EnableAutoConfiguration
 @EnableHypermediaSupport(type = { HypermediaType.HAL })
-public class Application {
+public class HalFormsSample {
 
 	@Bean
 	CommandLineRunner init(CategoryRepository categoryRepository, TaskRepository taskRepository) {
@@ -43,6 +43,6 @@ public class Application {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(HalFormsSample.class, args);
 	}
 }

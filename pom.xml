@@ -65,7 +65,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>com.midgetontoes.todolist.Application</start-class>
+		<start-class>sample.halforms.HalFormsSample</start-class>
 		<java.version>1.8</java.version>
 	</properties>
 
