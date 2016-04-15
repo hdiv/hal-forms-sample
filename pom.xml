@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>sample.halforms</groupId>
-	<artifactId>halforms</artifactId>
+	<artifactId>hal-forms-sample</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>HAL-FORMS sample</name>
-	<description>HAL-FORMS sample todo list</description>
+	<description>HAL-FORMS sample</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
