@@ -9,6 +9,7 @@ import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.forms.Form;
+import org.springframework.hateoas.forms.TemplatedResources;
 import org.springframework.hateoas.mvc.ControllerFormBuilder;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpHeaders;
@@ -45,14 +46,14 @@ public class TaskController {
 				.formTo(ControllerFormBuilder.methodOn(TaskController.class).create(new Task()));
 
 		formBuilder.property("description").readonly(false);
-		formBuilder.property("priority").suggest().values(Priority.values());// TODO enum
+		formBuilder.property("priority").suggest().values(Priority.values());
 		Link categoriesLink = ControllerLinkBuilder
 				.linkTo(ControllerLinkBuilder.methodOn(CategoryController.class).list()).withRel("categories");
 		formBuilder.property("category").suggest().link(categoriesLink);
 
 		Form form = formBuilder.withDefaultKey();
 
-		return new Resources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()), link, form);
+		return new TemplatedResources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()), link, form);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
