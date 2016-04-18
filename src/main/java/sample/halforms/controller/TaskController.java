@@ -3,8 +3,6 @@ package sample.halforms.controller;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -42,18 +40,18 @@ public class TaskController {
 	@RequestMapping(method = RequestMethod.GET)
 	public Resources<TaskResource> list() {
 		Link link = linkTo(TaskController.class).withSelfRel();
-		
+
 		ControllerFormBuilder formBuilder = ControllerFormBuilder
 				.formTo(ControllerFormBuilder.methodOn(TaskController.class).create(new Task()));
 
 		formBuilder.property("description").readonly(false);
-		formBuilder.property("priority").suggest().values(Arrays.asList(Priority.values()));// TODO enum
-		Link categoriesLink = ControllerLinkBuilder.
-				linkTo(ControllerLinkBuilder.methodOn(CategoryController.class).list()).withRel("categories");
+		formBuilder.property("priority").suggest().values(Priority.values());// TODO enum
+		Link categoriesLink = ControllerLinkBuilder
+				.linkTo(ControllerLinkBuilder.methodOn(CategoryController.class).list()).withRel("categories");
 		formBuilder.property("category").suggest().link(categoriesLink);
-		
+
 		Form form = formBuilder.withDefaultKey();
-		
+
 		return new Resources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()), link, form);
 	}
 
