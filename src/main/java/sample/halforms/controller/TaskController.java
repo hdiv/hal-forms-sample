@@ -53,7 +53,8 @@ public class TaskController {
 
 		Form form = formBuilder.withDefaultKey();
 
-		return new TemplatedResources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()), link, form);
+		return new TemplatedResources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()),
+				link, form);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -66,7 +67,7 @@ public class TaskController {
 		return new TaskResourceAssembler().toResource(taskService.markAsCompleted(id));
 	}
 
-	@RequestMapping(value = "/{itemId}/uncompleted", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{id}/uncompleted", method = RequestMethod.PUT)
 	public TaskResource markAsUncompleted(@PathVariable Long id) {
 		return new TaskResourceAssembler().toResource(taskService.markAsUncompleted(id));
 	}
