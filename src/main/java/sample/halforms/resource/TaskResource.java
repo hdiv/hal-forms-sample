@@ -13,6 +13,9 @@ public class TaskResource extends Resource<Task> {
 
 		add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).read(task.getId()))
 				.withSelfRel());
+		
+		add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).editForm(task.getId()))
+				.withRel("edit-form"));
 	}
 
 }
