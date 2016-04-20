@@ -29,8 +29,8 @@ public class HalFormsSample {
 	@Bean
 	CommandLineRunner init(CategoryRepository categoryRepository, TaskRepository taskRepository) {
 		return (evt) -> {
-			List<Category> categories = Arrays.asList(new Category("shopping"), new Category("family"),
-					new Category("hobbies"));
+			List<Category> categories = Arrays.asList(new Category("shopping", "Going shopping"), new Category(
+					"family", "Family things"), new Category("hobbies", "Hobbies"));
 			categoryRepository.save(categories);
 
 			taskRepository.save(new Task("take some photos", categories.get(2)));

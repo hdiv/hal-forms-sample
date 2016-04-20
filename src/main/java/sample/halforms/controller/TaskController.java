@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.forms.Form;
+import org.springframework.hateoas.forms.TemplatedResource;
 import org.springframework.hateoas.forms.TemplatedResources;
 import org.springframework.hateoas.mvc.ControllerFormBuilder;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import sample.halforms.jpa.CategoryRepository;
 import sample.halforms.model.Task;
 import sample.halforms.model.Task.Priority;
 import sample.halforms.resource.TaskResource;
@@ -34,12 +35,15 @@ public class TaskController {
 
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private CategoryRepository categories;
 
 	@Autowired
 	private EntityLinks entityLinks;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Resources<TaskResource> list() {
+	public TemplatedResources<TaskResource> list() {
 		Link link = linkTo(TaskController.class).withSelfRel();
 
 		ControllerFormBuilder formBuilder = ControllerFormBuilder
@@ -60,6 +64,24 @@ public class TaskController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public TaskResource read(@PathVariable Long id) {
 		return new TaskResourceAssembler().toResource(taskService.findOne(id));
+	}
+	
+	@RequestMapping(value = "/{id}/edit-form", method = RequestMethod.GET)
+	public TemplatedResource<Task> editForm(@PathVariable Long id) {
+		
+		Link link = ControllerLinkBuilder
+				.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).read(id)).withSelfRel();
+		
+		ControllerFormBuilder formBuilder = ControllerFormBuilder
+				.formTo(ControllerFormBuilder.methodOn(TaskController.class).create(new Task()));
+
+		formBuilder.property("description").readonly(false);
+		formBuilder.property("priority").suggest().values(Priority.values());
+		formBuilder.property("category").suggest().embedded(categories.findAll());
+
+		Form form = formBuilder.withDefaultKey();
+		
+		return new TemplatedResource<Task>(taskService.findOne(id), link, form);
 	}
 
 	@RequestMapping(value = "/{id}/completed", method = RequestMethod.PUT)
