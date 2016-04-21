@@ -51,4 +51,12 @@ public class TaskService {
 	public void delete(Long id) {
 		taskRepository.delete(id);
 	}
+
+	public void update(Long id, Task task) {
+		Task savedTask = taskRepository.findOne(id);
+		savedTask.setDescription(task.getDescription());
+		savedTask.setCategory(task.getCategory());
+		savedTask.setPriority(task.getPriority());
+		taskRepository.save(savedTask);
+	}
 }
