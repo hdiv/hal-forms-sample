@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import sample.halforms.model.Task;
 import sample.halforms.resource.EntryPointResource;
 
 @Controller
@@ -19,7 +18,6 @@ public class ApplicationController {
 
 		EntryPointResource entryPoint = new EntryPointResource();
 		entryPoint.add(linkTo(methodOn(TaskController.class).list()).withRel("tasks"));
-		entryPoint.add(linkTo(methodOn(TaskController.class).create(new Task())).withRel("create-task"));
 
 		return entryPoint;
 	}
