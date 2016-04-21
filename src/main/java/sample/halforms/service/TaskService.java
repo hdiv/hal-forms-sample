@@ -57,6 +57,9 @@ public class TaskService {
 		savedTask.setDescription(task.getDescription());
 		savedTask.setCategory(task.getCategory());
 		savedTask.setPriority(task.getPriority());
+		if (task.isCompleted()) {
+			savedTask.markAsCompleted();
+		}
 		taskRepository.save(savedTask);
 	}
 }
