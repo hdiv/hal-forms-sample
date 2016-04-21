@@ -8,7 +8,9 @@ import javax.persistence.OneToMany;
 
 import org.springframework.hateoas.core.Relation;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Relation(value = "category", collectionRelation = "categories")
@@ -29,7 +31,8 @@ public class Category extends AbstractEntity {
 		this.name = name;
 	}
 
-	public Category(String name, String description) {
+	@JsonCreator
+	public Category(@JsonProperty("name") String name, @JsonProperty("description") String description) {
 		this.name = name;
 		this.description = description;
 	}

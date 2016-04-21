@@ -8,6 +8,9 @@ import javax.persistence.ManyToOne;
 
 import org.springframework.hateoas.core.Relation;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Relation(value = "task", collectionRelation = "tasks")
 public class Task extends AbstractEntity {
@@ -31,7 +34,9 @@ public class Task extends AbstractEntity {
 		this.category = category;
 	}
 
-	public Task(String description, Priority priority, Category category) {
+	@JsonCreator
+	public Task(@JsonProperty("description") String description, @JsonProperty("priority") Priority priority,
+			@JsonProperty("category") Category category) {
 		this.description = description;
 		this.priority = priority;
 		this.category = category;
@@ -45,6 +50,10 @@ public class Task extends AbstractEntity {
 	public void markAsUncompleted() {
 		this.completed = false;
 		this.completedAt = null;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getDescription() {
