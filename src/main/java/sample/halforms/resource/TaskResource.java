@@ -18,7 +18,7 @@ public class TaskResource extends Resource<Task> {
 				.withRel("edit-form"));
 
 		add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).list())
-				.withRel("parent"));
+				.withRel("previous"));
 		add(ControllerLinkBuilder
 				.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).markAsCompleted(task.getId()))
 				.withRel("complete"));
