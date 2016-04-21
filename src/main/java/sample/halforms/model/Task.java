@@ -64,6 +64,10 @@ public class Task extends AbstractEntity {
 		return priority;
 	}
 
+	public void setPriority(Priority priority) {
+		this.priority = priority;
+	}
+
 	public boolean isCompleted() {
 		return completed;
 	}
