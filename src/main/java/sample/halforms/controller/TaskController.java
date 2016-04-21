@@ -76,6 +76,17 @@ public class TaskController {
 		return new TaskResourceAssembler().toResource(taskService.findOne(id));
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.HEAD)
+	public ResponseEntity<?> headEdit(@PathVariable Long id) {
+
+		HttpHeaders headers = new HttpHeaders();
+
+		Link linkCreate = linkTo(methodOn(TaskController.class).edit(id, new Task())).withRel("update-task");
+		headers.add("Link", new Links(linkCreate).toString());
+
+		return new ResponseEntity<Object>(headers, HttpStatus.NO_CONTENT);
+	}
+
 	@RequestMapping(value = "/{id}/edit-form", method = RequestMethod.GET)
 	public TemplatedResource<Task> editForm(@PathVariable Long id) {
 
@@ -94,8 +105,8 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> edit(@PathVariable Long id, Task task) {
-		taskService.save(task);
+	public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody Task task) {
+		taskService.update(id, task);
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
