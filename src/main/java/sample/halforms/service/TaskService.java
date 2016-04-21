@@ -60,6 +60,9 @@ public class TaskService {
 		if (task.isCompleted()) {
 			savedTask.markAsCompleted();
 		}
+		else if (savedTask.isCompleted()) {
+			savedTask.markAsUncompleted();
+		}
 		taskRepository.save(savedTask);
 	}
 }
