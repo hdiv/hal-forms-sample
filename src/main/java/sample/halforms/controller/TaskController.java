@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Links;
 import org.springframework.hateoas.forms.Form;
 import org.springframework.hateoas.forms.TemplatedResource;
 import org.springframework.hateoas.forms.TemplatedResources;
 import org.springframework.hateoas.mvc.ControllerFormBuilder;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class TaskController {
 
 	@Autowired
 	private TaskService taskService;
-	
+
 	@Autowired
 	private CategoryRepository categories;
 
@@ -50,10 +50,9 @@ public class TaskController {
 				.formTo(ControllerFormBuilder.methodOn(TaskController.class).create(new Task()));
 
 		formBuilder.property("description").readonly(false);
-		formBuilder.property("priority").suggest().values(Priority.values());
-		Link categoriesLink = ControllerLinkBuilder
-				.linkTo(ControllerLinkBuilder.methodOn(CategoryController.class).list()).withRel("categories");
-		formBuilder.property("category").suggest().link(categoriesLink);
+		formBuilder.property("priority").suggest().embedded(Priority.values());
+		Link categoriesLink = linkTo(methodOn(CategoryController.class).list()).withRel("categories");
+		formBuilder.property("category").suggest().embedded(categories.findAll());
 
 		Form form = formBuilder.withDefaultKey();
 
@@ -61,27 +60,43 @@ public class TaskController {
 				link, form);
 	}
 
+	@RequestMapping(method = RequestMethod.HEAD)
+	public ResponseEntity<?> head() {
+
+		HttpHeaders headers = new HttpHeaders();
+
+		Link linkCreate = linkTo(methodOn(TaskController.class).create(new Task())).withRel("create-task");
+		headers.add("Link", new Links(linkCreate).toString());
+
+		return new ResponseEntity<Object>(headers, HttpStatus.NO_CONTENT);
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public TaskResource read(@PathVariable Long id) {
 		return new TaskResourceAssembler().toResource(taskService.findOne(id));
 	}
-	
+
 	@RequestMapping(value = "/{id}/edit-form", method = RequestMethod.GET)
 	public TemplatedResource<Task> editForm(@PathVariable Long id) {
-		
-		Link link = ControllerLinkBuilder
-				.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).read(id)).withSelfRel();
-		
+
+		Link link = linkTo(methodOn(TaskController.class).read(id)).withSelfRel();
+
 		ControllerFormBuilder formBuilder = ControllerFormBuilder
-				.formTo(ControllerFormBuilder.methodOn(TaskController.class).create(new Task()));
+				.formTo(ControllerFormBuilder.methodOn(TaskController.class).edit(id, new Task()));
 
 		formBuilder.property("description").readonly(false);
 		formBuilder.property("priority").suggest().values(Priority.values());
 		formBuilder.property("category").suggest().embedded(categories.findAll());
 
 		Form form = formBuilder.withDefaultKey();
-		
+
 		return new TemplatedResource<Task>(taskService.findOne(id), link, form);
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> edit(@PathVariable Long id, Task task) {
+		taskService.save(task);
+		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}/completed", method = RequestMethod.PUT)
@@ -94,7 +109,7 @@ public class TaskController {
 		return new TaskResourceAssembler().toResource(taskService.markAsUncompleted(id));
 	}
 
-	@RequestMapping(method = RequestMethod.POST, consumes = { "application/json" })
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody Task task) {
 		taskService.save(task);
 		HttpHeaders responseHeaders = new HttpHeaders();
