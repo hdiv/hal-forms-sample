@@ -4,7 +4,6 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
@@ -39,9 +38,6 @@ public class TaskController {
 	@Autowired
 	private CategoryRepository categories;
 
-	@Autowired
-	private EntityLinks entityLinks;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public TemplatedResources<TaskResource> list() {
 		Link link = linkTo(TaskController.class).withSelfRel();
@@ -51,13 +47,15 @@ public class TaskController {
 
 		formBuilder.property("description").readonly(false);
 		formBuilder.property("priority").suggest().embedded(Priority.values());
-		Link categoriesLink = linkTo(methodOn(CategoryController.class).list()).withRel("categories");
+		// 1. Obtain categories from another service, add link to it
+		// Link categoriesLink = linkTo(methodOn(CategoryController.class).list()).withRel("categories");
+		// formBuilder.property("category").suggest().link(categoriesLink);
+		// 2. Embed the categories in the resource
 		formBuilder.property("category").suggest().embedded(categories.findAll());
 
 		Form form = formBuilder.withDefaultKey();
 
-		return new TemplatedResources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()),
-				link, form);
+		return new TemplatedResources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()), link, form);
 	}
 
 	@RequestMapping(method = RequestMethod.HEAD)
