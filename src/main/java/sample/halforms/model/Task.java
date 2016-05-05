@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.escalon.hypermedia.action.Input;
 import de.escalon.hypermedia.action.Select;
+import de.escalon.hypermedia.affordance.SuggestType;
 
 @Entity
 @Relation(value = "task", collectionRelation = "tasks")
@@ -39,8 +40,7 @@ public class Task extends AbstractEntity {
 
 	@JsonCreator
 	public Task(@Input(required = true) @JsonProperty("description") String description,
-			@JsonProperty("priority") Priority priority,
-			@Select(options = CategoryOptions.class) @JsonProperty("category") Category category) {
+			@JsonProperty("priority") Priority priority, @JsonProperty("category") Category category) {
 		this.description = description;
 		this.priority = priority;
 		this.category = category;
@@ -84,7 +84,7 @@ public class Task extends AbstractEntity {
 		return category;
 	}
 
-	public void setCategory(Category category) {
+	public void setCategory(@Select(options = CategoryOptions.class, type = SuggestType.EXTERNAL) Category category) {
 		this.category = category;
 	}
 
