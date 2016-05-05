@@ -71,7 +71,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<start-class>sample.halforms.HalFormsSample</start-class>
 		<java.version>1.8</java.version>
-		<spring-hateoas.version>0.20.0.BUILD-SNAPSHOT</spring-hateoas.version>
+		<spring-hateoas.version>0.20.0.AFFORDANCES-SNAPSHOT</spring-hateoas.version>
 	</properties>
 
 	<build>

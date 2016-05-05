@@ -17,14 +17,12 @@ public class TaskResource extends Resource<Task> {
 		add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).editForm(task.getId()))
 				.withRel("edit-form"));
 
+		add(ControllerLinkBuilder
+				.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).edit(task.getId(), new Task()))
+				.withRel("edit-form"));
+
 		add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).list())
 				.withRel("previous"));
-		add(ControllerLinkBuilder
-				.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).markAsCompleted(task.getId()))
-				.withRel("complete"));
-		add(ControllerLinkBuilder
-				.linkTo(ControllerLinkBuilder.methodOn(TaskController.class).markAsUncompleted(task.getId()))
-				.withRel("uncomplete"));
 
 	}
 

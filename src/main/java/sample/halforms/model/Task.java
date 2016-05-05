@@ -11,6 +11,8 @@ import org.springframework.hateoas.core.Relation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import de.escalon.hypermedia.action.Input;
+
 @Entity
 @Relation(value = "task", collectionRelation = "tasks")
 public class Task extends AbstractEntity {
@@ -35,8 +37,8 @@ public class Task extends AbstractEntity {
 	}
 
 	@JsonCreator
-	public Task(@JsonProperty("description") String description, @JsonProperty("priority") Priority priority,
-			@JsonProperty("category") Category category) {
+	public Task(@Input(required = true) @JsonProperty("description") String description,
+			@JsonProperty("priority") Priority priority, @JsonProperty("category") Category category) {
 		this.description = description;
 		this.priority = priority;
 		this.category = category;
