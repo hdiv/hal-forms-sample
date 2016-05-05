@@ -49,10 +49,6 @@ public class Category extends AbstractEntity {
 		return tasks;
 	}
 
-	public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
-	}
-
 	public String getName() {
 		return name;
 	}

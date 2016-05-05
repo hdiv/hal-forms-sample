@@ -79,8 +79,8 @@ public class TaskController {
 	@RequestMapping(value = "/{id}/edit-form", method = RequestMethod.GET, produces = "application/prs.hal-forms+json")
 	public ResourceSupport editForm(@PathVariable Long id) {
 
-		AffordanceBuilder formBuilder = linkTo(methodOn(TaskController.class).edit(id, new Task()));
-		Link link = linkTo(methodOn(TaskController.class).editForm(id)).and(formBuilder).withSelfRel();
+		AffordanceBuilder editTask = linkTo(methodOn(TaskController.class).edit(id, new Task()));
+		Link link = linkTo(methodOn(TaskController.class).editForm(id)).and(editTask).withSelfRel();
 
 		ResourceSupport halForm = new ResourceSupport();
 		halForm.add(link);
