@@ -39,8 +39,8 @@ public class Task extends AbstractEntity {
 	}
 
 	@JsonCreator
-	public Task(@Input(required = true) @JsonProperty("description") String description,
-			@JsonProperty("priority") Priority priority, @JsonProperty("category") Category category) {
+	public Task(@JsonProperty("description") String description, @JsonProperty("priority") Priority priority,
+			@JsonProperty("category") Category category) {
 		this.description = description;
 		this.priority = priority;
 		this.category = category;
@@ -56,7 +56,7 @@ public class Task extends AbstractEntity {
 		this.completedAt = null;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(@Input(required = true, editable = true) String description) {
 		this.description = description;
 	}
 
