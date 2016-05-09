@@ -46,6 +46,19 @@
 			<groupId>org.springframework.plugin</groupId>
 			<artifactId>spring-plugin-core</artifactId>
 		</dependency>
+		
+		<!-- Hdiv -->
+		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-config</artifactId>
+			<version>${hdiv.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hdiv</groupId>
+			<artifactId>hdiv-for-services</artifactId>
+			<version>${hdiv-for-services.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -74,6 +87,8 @@
 		<start-class>sample.halforms.HalFormsSample</start-class>
 		<java.version>1.8</java.version>
 		<spring-hateoas.version>0.20.0.AFFORDANCES-SNAPSHOT</spring-hateoas.version>
+		<hdiv.version>3.0.1-SNAPSHOT</hdiv.version>
+		<hdiv-for-services.version>0.1.1-SNAPSHOT</hdiv-for-services.version>
 	</properties>
 
 	<build>
