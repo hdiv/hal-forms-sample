@@ -116,6 +116,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	@Override
 	public void addExclusions(ExclusionRegistry registry) {
 		registry.addUrlExclusions("/browser/.*");
+		registry.addParamExclusions("rel");
 	}
 
 	@Override
@@ -204,7 +205,8 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 	@Bean
 	public ResourceLinkProcessor resourceLinkProcessor() {
-		return new DefaultResourceLinkProcessor(requestDataValueProcessor, requestMappingRegistry(), objectMapper);
+		return new DefaultResourceLinkProcessor(requestDataValueProcessor, requestMappingRegistry(), objectMapper,
+				stateUpdater(), hdivConfig, relProvider, curieProvider);
 	}
 
 	@Bean
