@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.escalon.hypermedia.spring.AffordanceBuilder;
+import sample.halforms.HdivCurieProvider;
 import sample.halforms.jpa.CategoryRepository;
 import sample.halforms.model.Task;
 import sample.halforms.model.TaskFilter;
@@ -65,6 +66,16 @@ public class TaskController {
 		return new TaskResourceAssembler().toResource(taskService.findOne(id));
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, params = HdivCurieProvider.REL_PARAM, produces = "application/prs.hal-forms+json")
+	public ResourceSupport read(@PathVariable Long id, @RequestParam String rel) {
+		AffordanceBuilder editTask = linkTo(methodOn(TaskController.class).edit(id, new Task()));
+		Link link = linkTo(methodOn(TaskController.class).read(id, rel)).and(editTask).withSelfRel();
+
+		ResourceSupport halForm = new ResourceSupport();
+		halForm.add(link);
+		return halForm;
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.HEAD)
 	public ResponseEntity<?> headEdit(@PathVariable Long id) {
 
@@ -74,17 +85,6 @@ public class TaskController {
 		headers.add("Link", new Links(linkCreate).toString());
 
 		return new ResponseEntity<Object>(headers, HttpStatus.NO_CONTENT);
-	}
-
-	@RequestMapping(value = "/{id}/edit-form", method = RequestMethod.GET, produces = "application/prs.hal-forms+json")
-	public ResourceSupport editForm(@PathVariable Long id) {
-
-		AffordanceBuilder editTask = linkTo(methodOn(TaskController.class).edit(id, new Task()));
-		Link link = linkTo(methodOn(TaskController.class).editForm(id)).and(editTask).withSelfRel();
-
-		ResourceSupport halForm = new ResourceSupport();
-		halForm.add(link);
-		return halForm;
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)

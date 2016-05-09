@@ -22,6 +22,8 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-rest-hal-browser</artifactId>
+			<!-- from here https://github.com/iunanua/spring-data-rest/tree/master/spring-data-rest-hal-browser -->
+			<version>2.6.0.BUILD-SNAPSHOT</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

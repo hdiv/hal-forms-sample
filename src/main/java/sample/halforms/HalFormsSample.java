@@ -13,7 +13,6 @@ import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.config.EnableHypermediaSupport.HypermediaType;
 import org.springframework.hateoas.hal.CurieProvider;
-import org.springframework.hateoas.hal.DefaultCurieProvider;
 
 import sample.halforms.jpa.CategoryRepository;
 import sample.halforms.jpa.TaskRepository;
@@ -29,8 +28,8 @@ public class HalFormsSample {
 	@Bean
 	CommandLineRunner init(CategoryRepository categoryRepository, TaskRepository taskRepository) {
 		return (evt) -> {
-			List<Category> categories = Arrays.asList(new Category("shopping", "Going shopping"), new Category(
-					"family", "Family things"), new Category("hobbies", "Hobbies"));
+			List<Category> categories = Arrays.asList(new Category("shopping", "Going shopping"),
+					new Category("family", "Family things"), new Category("hobbies", "Hobbies"));
 			categoryRepository.save(categories);
 
 			taskRepository.save(new Task("take some photos", categories.get(2)));
@@ -39,7 +38,7 @@ public class HalFormsSample {
 
 	@Bean
 	public CurieProvider curieProvider() {
-		return new DefaultCurieProvider("halforms", new UriTemplate("http://localhost:8080/profile/{rel}"));
+		return new HdivCurieProvider("halforms", new UriTemplate("{href}{?rel}"));
 	}
 
 	public static void main(String[] args) {
