@@ -76,6 +76,10 @@ public class Task extends AbstractEntity {
 		return completed;
 	}
 
+	public void setCompleted(@Input(editable = true) boolean completed) {
+		this.completed = completed;
+	}
+
 	public LocalDateTime getCompletedAt() {
 		return completedAt;
 	}
