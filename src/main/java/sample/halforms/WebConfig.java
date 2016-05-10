@@ -1,5 +1,6 @@
 package sample.halforms;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.RelProvider;
 import org.springframework.hateoas.hal.CurieProvider;
+import org.springframework.hateoas.mvc.TypeConstrainedMappingJackson2HttpMessageConverter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -41,8 +43,44 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	private RepositoryRestConfiguration restConfig;
 
 	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+	public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
 		converters.add(halFormsMessageConverter());
+		converters.add(new TypeConstrainedMappingJackson2HttpMessageConverter(Object.class) {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see org.springframework.http.converter.json.MappingJackson2HttpMessageConverter#canRead(java.lang.Class,
+			 * org.springframework.http.MediaType)
+			 */
+			@Override
+			public boolean canRead(final Class<?> clazz, final MediaType mediaType) {
+				return Object.class == clazz;
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * org.springframework.http.converter.json.MappingJackson2HttpMessageConverter#canRead(java.lang.reflect.
+			 * Type, java.lang.Class, org.springframework.http.MediaType)
+			 */
+			@Override
+			public boolean canRead(final Type type, final Class<?> contextClass, final MediaType mediaType) {
+				return Object.class == getJavaType(type, contextClass).getRawClass();
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * org.springframework.http.converter.json.MappingJackson2HttpMessageConverter#canWrite(java.lang.Class,
+			 * org.springframework.http.MediaType)
+			 */
+			@Override
+			public boolean canWrite(final Class<?> clazz, final MediaType mediaType) {
+				return Object.class == clazz;
+			}
+		});
 	}
 
 	@PostConstruct
