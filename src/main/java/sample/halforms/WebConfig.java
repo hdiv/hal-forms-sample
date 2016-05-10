@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.hdiv.web.hateoas.servlet.support.ServicesHdivRequestDataValueProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,6 +57,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 				resourceDescriptionMessageSourceAccessor);
 		converter.setSupportedMediaTypes(Arrays.asList(MediaType.parseMediaType("application/prs.hal-forms+json")));
 		return converter;
+	}
+
+	@Bean
+	public ServicesHdivRequestDataValueProcessor dataValueProcessor() {
+		return new ServicesHdivRequestDataValueProcessor();
 	}
 
 }
