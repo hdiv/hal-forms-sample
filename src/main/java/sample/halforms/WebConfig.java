@@ -45,37 +45,21 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
 		converters.add(halFormsMessageConverter());
+		/**
+		 * TODO Ugly ugly workaround to modify location attributes in the header when the body is empty
+		 */
 		converters.add(new TypeConstrainedMappingJackson2HttpMessageConverter(Object.class) {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see org.springframework.http.converter.json.MappingJackson2HttpMessageConverter#canRead(java.lang.Class,
-			 * org.springframework.http.MediaType)
-			 */
+
 			@Override
 			public boolean canRead(final Class<?> clazz, final MediaType mediaType) {
 				return Object.class == clazz;
 			}
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.springframework.http.converter.json.MappingJackson2HttpMessageConverter#canRead(java.lang.reflect.
-			 * Type, java.lang.Class, org.springframework.http.MediaType)
-			 */
 			@Override
 			public boolean canRead(final Type type, final Class<?> contextClass, final MediaType mediaType) {
 				return Object.class == getJavaType(type, contextClass).getRawClass();
 			}
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.springframework.http.converter.json.MappingJackson2HttpMessageConverter#canWrite(java.lang.Class,
-			 * org.springframework.http.MediaType)
-			 */
 			@Override
 			public boolean canWrite(final Class<?> clazz, final MediaType mediaType) {
 				return Object.class == clazz;
