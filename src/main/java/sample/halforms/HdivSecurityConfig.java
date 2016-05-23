@@ -22,8 +22,10 @@ import org.hdiv.session.ISession;
 import org.hdiv.state.StateUtil;
 import org.hdiv.state.scope.StateScopeManager;
 import org.hdiv.urlProcessor.BasicUrlProcessor;
+import org.hdiv.web.hateoas.DefaultRelationTypeRegistry;
 import org.hdiv.web.hateoas.DefaultRequestMappingHandlerMappingProcessor;
 import org.hdiv.web.hateoas.DefaultRequestMappingRegistry;
+import org.hdiv.web.hateoas.RelationTypeRegistry;
 import org.hdiv.web.hateoas.RequestMappingHandlerMappingConfiguration;
 import org.hdiv.web.hateoas.RequestMappingHandlerMappingProcessor;
 import org.hdiv.web.hateoas.RequestMappingRegistry;
@@ -34,6 +36,7 @@ import org.hdiv.web.hateoas.filter.HttpRequestBodyValidator;
 import org.hdiv.web.hateoas.filter.JsonHttpRequestBodyValidator;
 import org.hdiv.web.hateoas.filter.ValidatorHelperRestRequest;
 import org.hdiv.web.hateoas.init.RequestBodyReaderRequestInitializer;
+import org.hdiv.web.hateoas.mvc.RelationType;
 import org.hdiv.web.hateoas.state.AliasRegistry;
 import org.hdiv.web.hateoas.state.DefaultAliasRegistry;
 import org.hdiv.web.hateoas.state.DefaultHdivMappingRegistry;
@@ -52,6 +55,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.hateoas.RelProvider;
 import org.springframework.hateoas.hal.CurieProvider;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
@@ -174,6 +178,14 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	}
 
 	@Bean
+	public RelationTypeRegistry relationTypeRegistry() {
+		RelationTypeRegistry rtr = new DefaultRelationTypeRegistry();
+		rtr.add(new RelationType("tasks",
+				new RequestMethod[] { RequestMethod.GET, RequestMethod.PUT, RequestMethod.POST }));
+		return rtr;
+	}
+
+	@Bean
 	public StateUpdater stateUpdater() {
 		return new DefaultStateUpdater(stateUtil, aliasRegistry(), hdivConfig, objectMapper);
 	}
@@ -190,7 +202,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 	@Bean
 	public RequestMappingRegistry requestMappingRegistry() {
-		return new DefaultRequestMappingRegistry();
+		return new DefaultRequestMappingRegistry(relationTypeRegistry());
 	}
 
 	@Bean
