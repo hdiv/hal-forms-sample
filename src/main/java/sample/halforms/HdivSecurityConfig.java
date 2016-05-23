@@ -36,7 +36,6 @@ import org.hdiv.web.hateoas.filter.HttpRequestBodyValidator;
 import org.hdiv.web.hateoas.filter.JsonHttpRequestBodyValidator;
 import org.hdiv.web.hateoas.filter.ValidatorHelperRestRequest;
 import org.hdiv.web.hateoas.init.RequestBodyReaderRequestInitializer;
-import org.hdiv.web.hateoas.mvc.RelationType;
 import org.hdiv.web.hateoas.state.AliasRegistry;
 import org.hdiv.web.hateoas.state.DefaultAliasRegistry;
 import org.hdiv.web.hateoas.state.DefaultHdivMappingRegistry;
@@ -55,7 +54,6 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.hateoas.RelProvider;
 import org.springframework.hateoas.hal.CurieProvider;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.support.RequestDataValueProcessor;
 
@@ -180,8 +178,6 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	@Bean
 	public RelationTypeRegistry relationTypeRegistry() {
 		RelationTypeRegistry rtr = new DefaultRelationTypeRegistry();
-		rtr.add(new RelationType("tasks",
-				new RequestMethod[] { RequestMethod.GET, RequestMethod.PUT, RequestMethod.POST }));
 		return rtr;
 	}
 
