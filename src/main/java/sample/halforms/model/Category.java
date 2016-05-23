@@ -29,10 +29,6 @@ public class Category extends AbstractEntity {
 	public Category() {
 	}
 
-	public Category(String name) {
-		this.name = name;
-	}
-
 	@JsonCreator
 	public Category(@JsonProperty("name") String name, @JsonProperty("description") String description) {
 		this.name = name;

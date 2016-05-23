@@ -51,9 +51,9 @@ public class TaskService {
 	}
 
 	public Task save(Task task) {
-		Category category = categoryRepository.findByName(task.getCategory().getName());
+		Category category = categoryRepository.findOne(task.getCategory().getId());
 		if (category == null) {
-			throw new EntityNotFoundException(String.format("Category with name %s not found", task.getCategory().getName()));
+			throw new EntityNotFoundException(String.format("Category with id %s not found", task.getCategory().getId()));
 		}
 		task.setCategory(category);
 		return taskRepository.save(task);
@@ -66,9 +66,9 @@ public class TaskService {
 	public void update(Long id, Task task) {
 		Task savedTask = taskRepository.findOne(id);
 		savedTask.setDescription(task.getDescription());
-		Category category = categoryRepository.findByName(task.getCategory().getName());
+		Category category = categoryRepository.findOne(task.getCategory().getId());
 		if (category == null) {
-			throw new EntityNotFoundException(String.format("Category with name %s not found", task.getCategory().getName()));
+			throw new EntityNotFoundException(String.format("Category with id %s not found", task.getCategory().getId()));
 		}
 		savedTask.setCategory(category);
 		savedTask.setPriority(task.getPriority());
