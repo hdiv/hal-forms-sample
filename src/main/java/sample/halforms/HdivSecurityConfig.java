@@ -30,7 +30,7 @@ import org.hdiv.web.hateoas.RequestMappingHandlerMappingConfiguration;
 import org.hdiv.web.hateoas.RequestMappingHandlerMappingProcessor;
 import org.hdiv.web.hateoas.RequestMappingRegistry;
 import org.hdiv.web.hateoas.ResourceRequestDataValueProcessor;
-import org.hdiv.web.hateoas.dataComposer.ServicesDataComposerFactory;
+import org.hdiv.web.hateoas.dataComposer.HateoasDataComposerFactory;
 import org.hdiv.web.hateoas.error.HateoasValidationErrorHander;
 import org.hdiv.web.hateoas.filter.HttpRequestBodyValidator;
 import org.hdiv.web.hateoas.filter.JsonHttpRequestBodyValidator;
@@ -157,7 +157,7 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 
 	@Bean
 	public DataComposerFactory dataComposerFactory() {
-		ServicesDataComposerFactory factory = new ServicesDataComposerFactory();
+		HateoasDataComposerFactory factory = new HateoasDataComposerFactory();
 		factory.setConfig(hdivConfig);
 		factory.setSession(session);
 		factory.setUidGenerator(uidGenerator);
@@ -223,7 +223,6 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 	public RequestInitializer securityRequestInitializer() {
 		DefaultRequestInitializer ri = new RequestBodyReaderRequestInitializer(requestMappingRegistry());
 		ri.setConfig(hdivConfig);
-		ri.setSession(session);
 		return ri;
 	}
 
