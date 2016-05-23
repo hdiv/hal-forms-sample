@@ -109,16 +109,6 @@ public class TaskController {
 		return new TaskResourceAssembler().toResource(taskService.markAsUncompleted(id));
 	}
 
-	@RequestMapping(method = RequestMethod.GET, params = HdivCurieProvider.REL_PARAM, produces = "application/prs.hal-forms+json")
-	public ResourceSupport create() {
-		AffordanceBuilder createTask = linkTo(methodOn(TaskController.class).create(new Task()));
-		Link link = linkTo(methodOn(TaskController.class).create()).and(createTask).withSelfRel();
-
-		ResourceSupport halForm = new ResourceSupport();
-		halForm.add(link);
-		return halForm;
-	}
-
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody Task task) {
 		taskService.save(task);
