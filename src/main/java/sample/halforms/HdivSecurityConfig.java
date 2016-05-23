@@ -45,7 +45,9 @@ import org.hdiv.web.hateoas.state.JsonSchemaParameterFactory;
 import org.hdiv.web.hateoas.state.ParameterFactory;
 import org.hdiv.web.hateoas.state.StateUpdater;
 import org.hdiv.web.hateoas.support.DefaultResourceLinkProcessor;
+import org.hdiv.web.hateoas.support.DefaultResourceTemplateProcessor;
 import org.hdiv.web.hateoas.support.ResourceLinkProcessor;
+import org.hdiv.web.hateoas.support.ResourceTemplateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -223,6 +225,12 @@ public class HdivSecurityConfig extends HdivWebSecurityConfigurerAdapter {
 		ri.setConfig(hdivConfig);
 		ri.setSession(session);
 		return ri;
+	}
+
+	@Bean
+	public ResourceTemplateProcessor resourceTemplateProcessor() {
+		return new DefaultResourceTemplateProcessor(stateUpdater(), requestDataValueProcessor, objectMapper, hdivConfig,
+				relProvider, curieProvider);
 	}
 
 	@Bean
