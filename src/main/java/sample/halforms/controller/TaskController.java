@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.escalon.hypermedia.action.DTORequestParam;
 import de.escalon.hypermedia.spring.AffordanceBuilder;
 import sample.halforms.HdivCurieProvider;
 import sample.halforms.model.Task;
-import sample.halforms.model.TaskFilter;
 import sample.halforms.resource.TaskResource;
 import sample.halforms.resource.TaskResourceAssembler;
 import sample.halforms.service.TaskService;
@@ -89,22 +87,6 @@ public class TaskController {
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{id}", params = "cancel", method = RequestMethod.PUT)
-	public ResponseEntity<?> edit(@PathVariable Long id, @RequestParam String cancel, @RequestBody Task task) {
-		taskService.update(id, task);
-		return new ResponseEntity<Object>(HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/{id}/completed", method = RequestMethod.PUT)
-	public TaskResource markAsCompleted(@PathVariable Long id) {
-		return new TaskResourceAssembler().toResource(taskService.markAsCompleted(id));
-	}
-
-	@RequestMapping(value = "/{id}/uncompleted", method = RequestMethod.PUT)
-	public TaskResource markAsUncompleted(@PathVariable Long id) {
-		return new TaskResourceAssembler().toResource(taskService.markAsUncompleted(id));
-	}
-
 	@RequestMapping(method = RequestMethod.GET, params = HdivCurieProvider.REL_PARAM, produces = "application/prs.hal-forms+json")
 	public ResponseEntity<ResourceSupport> create() {
 		AffordanceBuilder createTask = linkTo(methodOn(TaskController.class).create(new Task()));
@@ -129,8 +111,4 @@ public class TaskController {
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
-	@RequestMapping(value = "/filtered", method = RequestMethod.GET)
-	public ResponseEntity<?> filter(@DTORequestParam TaskFilter filter) {
-		return new ResponseEntity<Object>(HttpStatus.OK);
-	}
 }
