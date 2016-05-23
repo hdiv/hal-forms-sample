@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.escalon.hypermedia.action.DTORequestParam;
 import de.escalon.hypermedia.spring.AffordanceBuilder;
 import sample.halforms.HdivCurieProvider;
-import sample.halforms.jpa.CategoryRepository;
 import sample.halforms.model.Task;
 import sample.halforms.model.TaskFilter;
 import sample.halforms.resource.TaskResource;
@@ -30,24 +30,20 @@ import sample.halforms.service.TaskService;
 
 @RestController
 @ExposesResourceFor(Task.class)
-@RequestMapping(value = "/tasks", produces = { "application/json" })
+@RequestMapping(value = "/tasks")
 public class TaskController {
 
 	@Autowired
 	private TaskService taskService;
 
-	@Autowired
-	private CategoryRepository categories;
-
 	@RequestMapping(method = RequestMethod.GET)
 	public Resources<TaskResource> list() {
 		Link link = linkTo(TaskController.class).withSelfRel();
-		Link linkFilter = linkTo(methodOn(TaskController.class).filter(new TaskFilter())).withRel("filter");
 
 		AffordanceBuilder formBuilder = linkTo(methodOn(TaskController.class).create(new Task()));
 
 		return new Resources<TaskResource>(new TaskResourceAssembler().toResources(taskService.findAll()), link,
-				linkFilter, formBuilder.withRel("tasks"));
+				formBuilder.withRel("tasks"));
 	}
 
 	@RequestMapping(method = RequestMethod.HEAD)
@@ -109,6 +105,16 @@ public class TaskController {
 		return new TaskResourceAssembler().toResource(taskService.markAsUncompleted(id));
 	}
 
+	@RequestMapping(method = RequestMethod.GET, params = HdivCurieProvider.REL_PARAM, produces = "application/prs.hal-forms+json")
+	public ResponseEntity<ResourceSupport> create() {
+		AffordanceBuilder createTask = linkTo(methodOn(TaskController.class).create(new Task()));
+		Link link = linkTo(methodOn(TaskController.class).create()).and(createTask).withSelfRel();
+
+		ResourceSupport halForm = new ResourceSupport();
+		halForm.add(link);
+		return ResponseEntity.ok(halForm);
+	}
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody Task task) {
 		taskService.save(task);
@@ -124,7 +130,7 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "/filtered", method = RequestMethod.GET)
-	public ResponseEntity<?> filter(TaskFilter filter) {
+	public ResponseEntity<?> filter(@DTORequestParam TaskFilter filter) {
 		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 }

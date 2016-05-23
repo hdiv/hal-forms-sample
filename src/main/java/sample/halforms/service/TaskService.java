@@ -5,7 +5,10 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import sample.halforms.EntityNotFoundException;
+import sample.halforms.jpa.CategoryRepository;
 import sample.halforms.jpa.TaskRepository;
+import sample.halforms.model.Category;
 import sample.halforms.model.Task;
 
 @Component
@@ -13,6 +16,9 @@ public class TaskService {
 
 	@Autowired
 	private TaskRepository taskRepository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	public Collection<Task> findByCategoryId(Long categoryId) {
 		return taskRepository.findByCategoryId(categoryId);
@@ -44,8 +50,13 @@ public class TaskService {
 		return item;
 	}
 
-	public Task save(Task item) {
-		return taskRepository.save(item);
+	public Task save(Task task) {
+		Category category = categoryRepository.findByName(task.getCategory().getName());
+		if (category == null) {
+			throw new EntityNotFoundException(String.format("Category with name %s not found", task.getCategory().getName()));
+		}
+		task.setCategory(category);
+		return taskRepository.save(task);
 	}
 
 	public void delete(Long id) {
@@ -55,7 +66,11 @@ public class TaskService {
 	public void update(Long id, Task task) {
 		Task savedTask = taskRepository.findOne(id);
 		savedTask.setDescription(task.getDescription());
-		savedTask.setCategory(task.getCategory());
+		Category category = categoryRepository.findByName(task.getCategory().getName());
+		if (category == null) {
+			throw new EntityNotFoundException(String.format("Category with name %s not found", task.getCategory().getName()));
+		}
+		savedTask.setCategory(category);
 		savedTask.setPriority(task.getPriority());
 		if (task.isCompleted()) {
 			savedTask.markAsCompleted();
