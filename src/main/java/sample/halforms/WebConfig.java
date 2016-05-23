@@ -3,8 +3,6 @@ package sample.halforms;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,10 +40,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(halFormsMessageConverter());
-	}
 
-	@PostConstruct
-	public void configRest() {
 		restConfig.exposeIdsFor(Category.class);
 	}
 
