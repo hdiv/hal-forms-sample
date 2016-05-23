@@ -38,7 +38,7 @@ public class HalFormsSample {
 
 	@Bean
 	public CurieProvider curieProvider() {
-		return new HdivCurieProvider("halforms", new UriTemplate("{href}{?rel}"));
+		return new HdivCurieProvider("halforms", new UriTemplate("{href}{&rel}"));
 	}
 
 	public static void main(String[] args) {

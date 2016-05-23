@@ -3,6 +3,9 @@ package sample.halforms;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
+import org.hdiv.web.hateoas.servlet.support.ServicesHdivRequestDataValueProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,9 +41,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	private RepositoryRestConfiguration restConfig;
 
 	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+	public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
 		converters.add(halFormsMessageConverter());
+	}
 
+	@PostConstruct
+	public void configRest() {
 		restConfig.exposeIdsFor(Category.class);
 	}
 
@@ -51,6 +57,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 				resourceDescriptionMessageSourceAccessor);
 		converter.setSupportedMediaTypes(Arrays.asList(MediaType.parseMediaType("application/prs.hal-forms+json")));
 		return converter;
+	}
+
+	@Bean
+	public ServicesHdivRequestDataValueProcessor dataValueProcessor() {
+		return new ServicesHdivRequestDataValueProcessor();
 	}
 
 }

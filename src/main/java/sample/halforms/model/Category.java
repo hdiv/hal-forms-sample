@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.hateoas.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Relation(value = "category", collectionRelation = "categories")
+@RestResource(exported = false)
 public class Category extends AbstractEntity {
 
 	private String name;
